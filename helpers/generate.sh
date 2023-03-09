@@ -30,4 +30,8 @@ pushd "${DOWNLOADS_DIR}" >/dev/null
 <"${ASSET_DIR}/filter.mgk.template" env DEST_PREFIX="$DEST_PREFIX" envsubst '${DEST_PREFIX}' | magick -script -
 popd >/dev/null
 
-find "$GENERATED_DIR" -type f -iname '*.png' -execdir oxipng --quiet {} +
+if command -v oxipng >/dev/null ; then
+	find "$GENERATED_DIR" -type f -iname '*.png' -execdir oxipng --quiet {} +
+else if command -v optipng >/dev/null ; then
+	find "$GENERATED_DIR" -type f -iname '*.png' -execdir oxipng --quiet {} +
+fi

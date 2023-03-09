@@ -45,8 +45,9 @@ $ helpers/dl.sh path/to/asset.conf
     + 画像のダウンロードに用いる。
 * `imagemagick` (バージョン 7 以降)
     + 画像の加工に用いる。
-* `oxipng`
+* (任意) `oxipng` または `optipng`
     + 生成された PNG ファイルのサイズを無劣化で最適化するのに用いる。
+    + `oxipng`, `optipng` の順に優先的に使われる。いずれもなければ、最適化はされない。
 
 ## なぜ？
 
