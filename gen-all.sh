@@ -1,4 +1,8 @@
 #!/bin/sh
+# Copyright 2023 logo-emojifier contributors
+# Distributed under the terms of the GNU Affero General Public License v3.0 or later
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
 set -eu
 
 # Set NUM_PARALLEL_DOWNLOAD to `ceil(nproc / 2)` if not specified.
