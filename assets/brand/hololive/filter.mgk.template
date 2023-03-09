@@ -1,0 +1,223 @@
+# Copyright 2023 logo-emojifier contributors
+# Distributed under the terms of the GNU Affero General Public License v3.0 or later
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Replace the variables below by text processing such as `envsubst`.
+#
+# * DEST_PREFIX: path prefix for the files to be generated.
+
+( -read "hololive.2048x530.png" -write mpr:source +delete )
+
+# Hololive logo is clearly visible on either dark or light background, so keep the alpha as is.
+
+# Generate the icon.
+# Note that the icon has semi-transparent color.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 425x530+55+0 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}icon.png"
+		+delete
+)
+
+# Keep baseline (y=+108 + height=302) and ascent (y=+108) identical.
+
+# Generate `h`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 182x302+551+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}h.png"
+		+delete
+)
+
+# Generate `o0` and `o1`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 182x302+777+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}o0.png"
+		-write "${DEST_PREFIX}o1.png"
+		+delete
+)
+
+# Generate `l0` and `l1`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 62x302+1003+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}l0.png"
+		-write "${DEST_PREFIX}l1.png"
+		+delete
+)
+
+# Generate `i`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 62x302+1451+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}i.png"
+		+delete
+)
+
+# Generate `v`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 181x302+1567+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}v.png"
+		+delete
+)
+
+# Generate `e`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 183x302+1794+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}e.png"
+		+delete
+)
+
+# Generate `ho`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 408x302+551+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}ho.png"
+		+delete
+)
+
+# Generate `ol0` and `ol1`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 288x302+777+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}ol0.png"
+		-write "${DEST_PREFIX}ol1.png"
+		+delete
+)
+
+# Generate `lo`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 288x302+1003+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}lo.png"
+		+delete
+)
+
+# Generate `li`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 171x302+1341+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}li.png"
+		+delete
+)
+
+# Generate `iv`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 297x302+1452+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}iv.png"
+		+delete
+)
+
+# Generate `ve`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 410x302+1567+108 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}ve.png"
+		+delete
+)
+
+# Generate `o0_big` and `o1_big`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 182x212+777+199 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}o0_big.png"
+		-write "${DEST_PREFIX}o1_big.png"
+		+delete
+)
+
+# Generate `i_big`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 60x271+1452+139 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}i_big.png"
+		+delete
+)
+
+# Generate `v_big`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 182x212+1567+199 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}v_big.png"
+		+delete
+)
+
+# Generate `e_big`.
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 183x212+1794+199 +repage
+		# Expand the image to the square.
+		-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+		# Save.
+		-write "${DEST_PREFIX}e_big.png"
+		+delete
+)
