@@ -1,0 +1,272 @@
+# Replace the variables below by text processing such as `envsubst`.
+#
+# * DEST_PREFIX: path prefix for the files to be generated.
+
+( -read "転生王女と天才令嬢の魔法革命.643x270.png" -write mpr:source +delete )
+
+(
+	mpr:source
+		# Convert transparent background into white.
+		# Note that some of the colored pixels are also semi-transparent.
+		-background white -alpha remove -alpha off
+		# Save as the source.
+		-write mpr:source +delete
+)
+
+# Generate `ten0`
+(
+	mpr:source
+		# Crop the character.
+		-gravity northwest -crop 65x94+25+27 +repage
+		# Expand the canvas.
+		-bordercolor white -border 20
+		# Save as `cropped`.
+		-write mpr:cropped
+		# Make the background transparent.
+		# `-fuzz 0%` won't be necessary since this is png.
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill'
+		# Save as `body`.
+		-write mpr:body
+		+delete
+	mpr:cropped
+		# Make the background transparent using fuzzy floodfill.
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill'
+		# Make a white-on-black mask.
+		# Transparent background to black, opaque part to white.
+		-alpha extract
+		# Make the black background transparent again.
+		-transparent black
+		# Expand the white region.
+		-morphology dilate disk:4
+		# Blur to anti-alias the outline.
+		-blur 2x4
+		# Save as `dilated-mask`.
+		-write mpr:dilated-mask
+		+delete
+	# Composite `body` over `dilated-mask`.
+	mpr:dilated-mask mpr:body -composite
+	# Trim.
+	-trim
+	# Expand the image to the square.
+	-background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	# Save.
+	-write "${DEST_PREFIX}ten0.png"
+	+delete
+)
+
+# Generate `sei`
+(
+	mpr:source
+		-gravity northwest -crop 67x90+91+28 +repage
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4
+		# Fill the holes.
+			# Add transparent 1px border around the image.
+			-bordercolor none -border 1
+			# Fill the newly added border and connected transparent region by red.
+			-fuzz 0% -fill red -floodfill +0+0 none
+			# Turn non-red into white.
+			-fill white -opaque none
+			# Turn red into transparent.
+			-fill none -opaque red
+			# Finally shave 1px border around the image.
+			-shave 1x1
+		-blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}sei.png"
+	+delete
+)
+
+# Generate `ou`
+(
+	mpr:source
+		-gravity northwest -crop 64x87+160+31 +repage
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}ou.png"
+	+delete
+)
+
+# Generate `jo`
+(
+	mpr:source
+		-gravity northwest -crop 64x96+224+25 +repage
+		# Remove the garbage.
+		#+gravity -region 10x18+54+44 -fill white -colorize 100 # TODO: This results in completely broken image! Workaround by compositing "patch" image.
+		-gravity northeast ( -size 10x18 canvas:white ) -geometry +0+44 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}jo.png"
+	+delete
+)
+
+# Generate `to`
+(
+	mpr:source
+		-gravity northwest -crop 49x63+279+47 +repage
+		# Remove the garbage.
+		-gravity northwest ( -size 10x6 canvas:white ) -composite # Composite a white patch image.
+		-gravity southwest ( -size 5x11 canvas:white ) -composite # Composite a white patch image.
+		-gravity northeast ( -size 2x4 canvas:white ) -geometry +0+14 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}to.png"
+	+delete
+)
+
+# Generate `ten1`
+(
+	mpr:source
+		-gravity northwest -crop 81x94+316+26 +repage
+		# Remove the garbage.
+		-gravity northwest ( -size 12x24 canvas:white ) -geometry +0+40 -composite +geometry # Composite a white patch image.
+		-gravity northeast ( -size 10x6 canvas:white ) -geometry +0+23 -composite +geometry # Composite a white patch image.
+		-gravity northeast ( -size 16x8 canvas:white ) -geometry +0+66 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}ten1.png"
+	+delete
+)
+
+# Generate `sai`
+(
+	mpr:source
+		-gravity northwest -crop 72x96+381+26 +repage
+		# Remove the garbage.
+		-gravity northwest ( -size 6x40 canvas:white ) -composite # Composite a white patch image.
+		-gravity southwest ( -size 16x21 canvas:white ) -composite # Composite a white patch image.
+		-gravity northeast ( -size 7x7 canvas:white ) -geometry +0+39 -composite +geometry # Composite a white patch image.
+		-gravity northeast ( -size 14x10 canvas:white ) -geometry +0+46 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}sai.png"
+	+delete
+)
+
+# Generate `rei`
+(
+	mpr:source
+		-gravity northwest -crop 71x96+439+25 +repage
+		# Remove the garbage.
+		-gravity northwest ( -size 14x17 canvas:white ) -geometry +0+13 -composite +geometry # Composite a white patch image.
+		-gravity northwest ( -size 5x10 canvas:white ) -geometry +0+36 -composite +geometry # Composite a white patch image.
+		-gravity northeast ( -size 2x5 canvas:white ) -geometry +0+25 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4
+		# Fill the holes.
+		-bordercolor none -border 1 -fuzz 0% -fill red -floodfill +0+0 none -fill white -opaque none -fill none -opaque red -shave 1x1
+		-blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}rei.png"
+	+delete
+)
+
+# Generate `jou`
+(
+	mpr:source
+		-gravity northwest -crop 78x96+508+26 +repage
+		# Remove the garbage.
+		-gravity northwest ( -size 2x4 canvas:white ) -geometry +0+34 -composite +geometry # Composite a white patch image.
+		-gravity northeast ( -size 11x22 canvas:white ) -geometry +0+41 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	# Move 4px to the right.
+	-page +4+0 -background none -flatten
+	-write "${DEST_PREFIX}jou.png"
+	+delete
+)
+
+# Generate `no`
+(
+	mpr:source
+		-gravity northwest -crop 50x64+575+46 +repage
+		# Remove the garbage.
+		-gravity southwest ( -size 8x3 canvas:white ) -composite # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 2x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}no.png"
+	+delete
+)
+
+# Generate `ma`
+(
+	mpr:source
+		-gravity northwest -crop 109x135+126+127 +repage
+		# Remove the garbage.
+		-gravity northeast ( -size 9x50 canvas:white ) -composite # Composite a white patch image.
+		-gravity northeast ( -size 6x13 canvas:white ) -geometry +0+95 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4
+		# Fill the holes.
+		-bordercolor none -border 1 -fuzz 0% -fill green -floodfill +0+0 none -fill white -opaque none -fill none -opaque green -shave 1x1
+		-blur 3x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}ma.png"
+	+delete
+)
+
+# Generate `hou`
+(
+	mpr:source
+		-gravity northwest -crop 102x132+227+129 +repage
+		# Remove the garbage.
+		-gravity northwest ( -size 8x15 canvas:white ) -geometry +0+69 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4
+		# Fill the holes.
+		-bordercolor none -border 1 -fuzz 0% -fill green -floodfill +0+0 none -fill white -opaque none -fill none -opaque green -shave 1x1
+		# 3x4 is good.
+		-blur 3x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}hou.png"
+	+delete
+)
+
+# Generate `kaku`
+(
+	mpr:source
+		-gravity northwest -crop 98x133+330+128 +repage
+		# Remove the garbage.
+		-gravity northeast ( -size 6x12 canvas:white ) -geometry +0+42 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4 -blur 3x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}kaku.png"
+	+delete
+)
+
+# Generate `mei`
+(
+	mpr:source
+		-gravity northwest -crop 101x134+422+127 +repage
+		# Remove the garbage.
+		-gravity northwest ( -size 6x10 canvas:white ) -geometry +0+71 -composite +geometry # Composite a white patch image.
+		-bordercolor white -border 20 -write mpr:cropped -alpha set -background none -channel RGBA -fill '#00000000' -fuzz 0% -draw 'alpha 0,0 floodfill' -write mpr:body +delete
+	mpr:cropped
+		-alpha set -background none -channel RGBA -fill '#00000000' -fuzz 5% -draw 'alpha 0,0 floodfill' -alpha extract -transparent black -morphology dilate disk:4
+		# Fill the holes.
+		-bordercolor none -border 1 -fuzz 0% -fill green -floodfill +0+0 none -fill white -opaque none -fill none -opaque green -shave 1x1
+		-blur 3x4 -write mpr:dilated-mask +delete
+	mpr:dilated-mask mpr:body -composite -trim -background none -set option:long '%[fx:max(w,h)]' -set page "%[fx:long]x%[fx:long]+%[fx:(long-w)/2]+%[fx:(long-h)/2]" -coalesce
+	-write "${DEST_PREFIX}mei.png"
+	+delete
+)
